@@ -45,7 +45,7 @@ def run():
 
     counts = get_counts()
 
-    n = 6000
+    n = 600
 
     while True:
 
