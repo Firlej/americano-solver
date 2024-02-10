@@ -58,7 +58,6 @@ def run():
         counts.attrs["n"] += n
         
         save_counts(counts)
-        break
 
 if __name__ == "__main__":
     run()
