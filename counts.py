@@ -1,3 +1,4 @@
+import time
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
@@ -10,6 +11,8 @@ import pickle
 from Card import Card
 from Cards import Cards
 from Deck import Deck
+
+
 
 filename = 'counts.pickle'
 
@@ -47,6 +50,8 @@ def run():
     while True:
 
         for _ in tqdm(range(n)):
+
+            time.sleep(0.1)
             
             for cards_in_play_n in counts.columns:
                 
@@ -61,9 +66,4 @@ def run():
 
 if __name__ == "__main__":
     run()
-
-
-
-
-
 
