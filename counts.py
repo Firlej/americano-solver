@@ -7,12 +7,12 @@ import random
 from typing import List
 from functools import partial
 import pickle
+import re
+import multiprocessing
 
 from Card import Card
 from Cards import Cards
 from Deck import Deck
-
-
 
 filename = 'counts.pickle'
 
@@ -40,30 +40,76 @@ def get_counts():
     except FileNotFoundError:
         return init_counts()
 
+def get_counts_probabilities():
+    df = load_counts()
+    return df / df.attrs["n"]
 
-def run():
+def get_counts_probabilities_average():
 
     counts = get_counts()
+    combs = [
+        'is_high_card',
+        'is_pair',
+        'is_two_pair',
+        'is_small_straight',
+        'is_big_straight',
+        'is_three',
+        'is_full',
+        'is_quad',
+        'is_flush',
+        'is_small_poker',
+        'is_big_poker'
+    ]
+
+    df = pd.DataFrame()
+
+    for comb in combs:
+        matching_cols = [col for col in counts.columns if re.search(comb, col)]
+        df[comb] = counts[matching_cols].mean(axis=1) / counts.attrs["n"]
+    return df
+
+
+
+def compute_counts(id):
+    from os import getpid
+    # print(id, getpid())
+
+    deck = Deck()
+    counts = init_counts()
 
     n = 600
 
+    for _ in tqdm(range(n), desc=f"{getpid()}"):
+        
+        for cards_in_play_n in counts.index:
+            
+            cards_in_play = deck.sample(cards_in_play_n)
+            
+            for combination_name, func in cards_in_play.combinations[:]:
+                counts.loc[cards_in_play_n, combination_name] += int(func())
+
+            del cards_in_play
+
+    counts.attrs["n"] += n
+
+    return counts
+
+def run():
+
+    workers = multiprocessing.cpu_count() - 1
+
     while True:
 
-        for _ in tqdm(range(n)):
+        counts = get_counts()
 
-            time.sleep(0.1)
+        pool = multiprocessing.Pool(processes = workers)
+        new_counts_list = pool.map(compute_counts, range(workers))
+
+        for new_counts in new_counts_list:
+            counts += new_counts
+            counts.attrs["n"] += new_counts.attrs["n"]
             
-            for cards_in_play_n in counts.index:
-                
-                cards_in_play = deck.sample(cards_in_play_n)
-                
-                for combination_name, func in cards_in_play.combinations[:]:
-                    counts.loc[cards_in_play_n, combination_name] += int(func())
-
-        counts.attrs["n"] += n
-        
         save_counts(counts)
 
 if __name__ == "__main__":
     run()
-
