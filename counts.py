@@ -21,7 +21,7 @@ deck = Deck()
 def init_counts():
     combination_names = [combination_name for combination_name, _ in deck.combinations]
     cards_in_play_n_list = list(range(2,19))
-    counts = pd.DataFrame(0, index=combination_names, columns=cards_in_play_n_list)
+    counts = pd.DataFrame(0, index=cards_in_play_n_list, columns=combination_names)
     counts.attrs = {"n": 0}
     return counts
 
@@ -58,7 +58,7 @@ def run():
                 cards_in_play = deck.sample(cards_in_play_n)
                 
                 for combination_name, func in cards_in_play.combinations[:]:
-                    counts.loc[combination_name, cards_in_play_n] += int(func())
+                    counts.loc[cards_in_play_n, combination_name] += int(func())
 
         counts.attrs["n"] += n
         
