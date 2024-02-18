@@ -53,7 +53,7 @@ def run():
 
             time.sleep(0.1)
             
-            for cards_in_play_n in counts.columns:
+            for cards_in_play_n in counts.index:
                 
                 cards_in_play = deck.sample(cards_in_play_n)
                 
