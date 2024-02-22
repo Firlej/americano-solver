@@ -1,6 +1,6 @@
 version: '3'
 services:
-  bot-o:
+  solver:
     image: solver
     container_name: solver
     restart: unless-stopped
