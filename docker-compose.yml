@@ -3,6 +3,7 @@ services:
   solver:
     image: solver
     container_name: solver
+    network_mode: host
     restart: unless-stopped
     build:
       context: .
