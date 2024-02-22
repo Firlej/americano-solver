@@ -1,0 +1,9 @@
+version: '3'
+services:
+  bot-o:
+    image: solver
+    container_name: solver
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
