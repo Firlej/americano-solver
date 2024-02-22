@@ -15,3 +15,4 @@ def is_rank_higher(rank_a, rank_b):
 
 RANK_PAIRS = [(a,b) for (a,b) in list(itertools.product(RANKS, RANKS)) if a != b]
 RANK_PAIRS_DESCENDING = [(a,b) for (a,b) in RANK_PAIRS if is_rank_higher(a, b)]
+

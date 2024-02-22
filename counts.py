@@ -11,7 +11,6 @@ import re
 import multiprocessing
 
 from Card import Card
-from Cards import Cards
 from Deck import Deck
 
 filename = 'counts.pickle'
@@ -96,7 +95,7 @@ def compute_counts(id):
 
 def run():
 
-    workers = multiprocessing.cpu_count() - 1
+    workers = multiprocessing.cpu_count() // 2
 
     while True:
 
