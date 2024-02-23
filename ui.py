@@ -14,7 +14,7 @@ if 'n' not in st.session_state:
             
 st.title('Liars Poker Combinations Probability')
 
-st.session_state.n = st.slider('Number of cards in play', min_value=2, max_value=24, value=1, step=1)
+st.session_state.n = st.slider('Number of cards in play', min_value=2, max_value=24, value=2, step=1)
 
 def toogle_card(card: Card):
     if card in st.session_state.hand:
