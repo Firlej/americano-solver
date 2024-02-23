@@ -9,6 +9,7 @@ import pickle
 import math
 from math import comb
 import re
+from collections import namedtuple
 
 pd.set_option("display.max_rows", 83)
 pd.set_option("display.max_columns", 83)
@@ -17,7 +18,7 @@ from helpers import RANKS, SUITS, RANK_PAIRS, SMALL_STRAIGHT_RANKS, BIG_STRAIGHT
 
 from Card import Card
 from Deck import Deck
-from counts import init_counts
+from simulate import init_counts
 
 class DeckSolver(Deck):
     def __init__(self, cards_list: List[Card] = None):
@@ -246,4 +247,102 @@ class Solver:
             "K": 1,
             "A": 1
         })
-        
+
+Combination = namedtuple("Combination", ["name", "method", "kwargs"])
+
+combinations = []
+
+for rank in RANKS:
+    combinations.append(Combination(
+        name = f"high_card_{rank}",
+        method = "probability_high_card",
+        kwargs = {
+            "rank": rank
+        }
+    ))
+
+for rank in RANKS:
+    combinations.append(Combination(
+        name = f"pair_{rank}",
+        method = "probability_pair",
+        kwargs = {
+            "rank": rank
+        }
+    ))
+
+for a, b in RANK_PAIRS_DESCENDING:
+    combinations.append(Combination(
+        name = f"two_pair_{rank}",
+        method = "probability_two_pair",
+        kwargs = {
+            "rank_a": a,
+            "rank_b": b,
+        }
+    ))
+
+combinations.append(Combination(
+    name = f"small_straight",
+    method = "probability_small_straight",
+    kwargs = {}
+))
+
+combinations.append(Combination(
+    name = f"big_straight",
+    method = "probability_big_straight",
+    kwargs = {}
+))
+
+for rank in RANKS:
+    combinations.append(Combination(
+        name = f"three_{rank}",
+        method = "probability_three",
+        kwargs = {
+            "rank": rank
+        }
+    ))
+
+for a, b in RANK_PAIRS:
+    combinations.append(Combination(
+        name = f"full_{rank}",
+        method = "probability_full",
+        kwargs = {
+            "rank_a": a,
+            "rank_b": b,
+        }
+    ))
+
+for rank in RANKS:
+    combinations.append(Combination(
+        name = f"quad_{rank}",
+        method = "probability_quad",
+        kwargs = {
+            "rank": rank
+        }
+    ))
+
+for suit in SUITS:
+    combinations.append(Combination(
+        name = f"flush_{suit}",
+        method = "probability_flush",
+        kwargs = {
+            "suit": suit
+        }
+    ))
+
+for suit in SUITS:
+    combinations.append(Combination(
+        name = f"small_poker_{suit}",
+        method = "probability_small_poker",
+        kwargs = {
+            "suit": suit
+        }
+    ))
+
+for suit in SUITS:
+    combinations.append(Combination(
+        name = f"big_poker_{suit}",
+        method = "probability_big_poker",
+        kwargs = {
+            "suit": suit
+        }
+    ))

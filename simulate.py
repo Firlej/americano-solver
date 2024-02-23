@@ -13,7 +13,7 @@ import multiprocessing
 from Card import Card
 from Deck import Deck
 
-filename = 'counts.pickle'
+filename = 'simulation_counts.pickle'
 
 deck = Deck()
 
