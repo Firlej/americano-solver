@@ -21,7 +21,6 @@ def toogle_card(card: Card):
         st.session_state.hand.remove(card)
     else:
         st.session_state.hand.add(card)
-    print(card, st.session_state.hand)
 
 # Create a grid of buttons
 for i, col in enumerate(st.columns(len(RANKS))):
