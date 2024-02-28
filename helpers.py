@@ -3,9 +3,9 @@ import itertools
 RANKS = ["9", "T", "J", "Q", "K", "A"]
 SUITS = ["♠", "♣", "♦", "♥"]
 
-TOTAL_CARDS_NUM = len(RANKS) * len(SUITS)
-NUM_EACH_RANK = len(SUITS) # number of each rank (eg. 4 Aces in a deck)
-NUM_EACH_SUIT = len(RANKS) # number of each suit (eg. 6 Hearts in a deck)
+EACH_RANK_COUNT = len(SUITS) # number of each rank (eg. 4 Aces in a deck)
+EACH_SUIT_COUNT = len(RANKS) # number of each suit (eg. 6 Hearts in a deck)
+TOTAL_CARDS_NUM = EACH_RANK_COUNT * EACH_SUIT_COUNT
 
 SMALL_STRAIGHT_RANKS = {"9", "T", "J", "Q", "K"}
 BIG_STRAIGHT_RANKS = {"T", "J", "Q", "K", "A"}
