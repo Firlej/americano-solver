@@ -24,18 +24,19 @@ class Deck:
         else:
             self.cards = cards_list
 
-        self.combinations = []
-        self.combinations.extend([(f'is_high_card_{rank}', partial(self.is_high_card, rank=rank)) for rank in RANKS])
-        self.combinations.extend([(f'is_pair_{rank}', partial(self.is_pair, rank=rank)) for rank in RANKS])
-        self.combinations.extend([(f'is_two_pair_{a}_{b}', partial(self.is_two_pair, rank_a = a, rank_b = b)) for (a, b) in RANK_PAIRS_DESCENDING])
-        self.combinations.extend([(f'is_small_straight', partial(self.is_small_straight))])
-        self.combinations.extend([(f'is_big_straight', partial(self.is_big_straight))])
-        self.combinations.extend([(f'is_three_{rank}', partial(self.is_three, rank=rank)) for rank in RANKS])
-        self.combinations.extend([(f'is_full_{a}_{b}', partial(self.is_full, rank_three = a, rank_pair = b)) for (a, b) in RANK_PAIRS])
-        self.combinations.extend([(f'is_quad_{rank}', partial(self.is_quad, rank=rank)) for rank in RANKS])
-        self.combinations.extend([(f'is_flush_{suit}', partial(self.is_flush, suit=suit)) for suit in SUITS])
-        self.combinations.extend([(f'is_small_poker_{suit}', partial(self.is_small_poker, suit=suit)) for suit in SUITS])
-        self.combinations.extend([(f'is_big_poker_{suit}', partial(self.is_big_poker, suit=suit)) for suit in SUITS])
+        self.combinations = {}
+        self.combinations.update({f'high_card_{rank}': self.is_high_card(rank=rank) for rank in RANKS})
+        self.combinations.update({f'pair_{rank}': self.is_pair(rank=rank) for rank in RANKS})
+        self.combinations.update({f'two_pair_{a}_{b}': self.is_two_pair(rank_a=a, rank_b=b) for a, b in RANK_PAIRS_DESCENDING})
+        self.combinations.update({f'small_straight': self.is_small_straight()})
+        self.combinations.update({f'big_straight': self.is_big_straight()})
+        self.combinations.update({f'three_{rank}': self.is_three(rank=rank) for rank in RANKS})
+        self.combinations.update({f'full_{a}_{b}': self.is_full(rank_three=a, rank_pair=b) for a, b in RANK_PAIRS})
+        self.combinations.update({f'quad_{rank}': self.is_quad(rank=rank) for rank in RANKS})
+        self.combinations.update({f'flush_{suit}': self.is_flush(suit=suit) for suit in SUITS})
+        self.combinations.update({f'small_poker_{suit}': self.is_small_poker(suit=suit) for suit in SUITS})
+        self.combinations.update({f'big_poker_{suit}': self.is_big_poker(suit=suit) for suit in SUITS})
+
 
     @staticmethod
     def get_all_cards():
@@ -72,9 +73,6 @@ class Deck:
     # WAYS OF PICKING COMBINATIONS
 
     def total_ways(self, n):
-        """
-            Total ways of picking n cards from self.cards
-        """
         return comb(len(self.cards), n)
     
     def ways_ranks_nums(self, n, rank_num_dict: Dict[str, int]):

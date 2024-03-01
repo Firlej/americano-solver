@@ -36,14 +36,14 @@ class Solver:
     def __init__(
         self,
         hand: List[Card],
-        unknown_cards_in_play_num: int
+        cards_in_play_num: int
     ):
-        assert unknown_cards_in_play_num >= 0
-        assert unknown_cards_in_play_num <= 24 - len(hand)
+        assert cards_in_play_num >= len(hand)
+        assert cards_in_play_num <= TOTAL_CARDS_NUM
         
         self.hand = Deck(hand)
         self.deck = Deck([card for card in Deck.get_all_cards() if card not in self.hand.cards])
-        self.unknown_cards_in_play_num = unknown_cards_in_play_num
+        self.n = cards_in_play_num - len(hand)
     
     def __probabilty_n_ranks(self, rank_need_dict: Dict[str, int]):
         
@@ -54,11 +54,9 @@ class Solver:
         
         if len(rank_need_real_dict) == 0:
             return 1
-    
-        n = self.unknown_cards_in_play_num
         
         need_real_sum = sum([need_real for need_real in rank_need_real_dict.values()])
-        if need_real_sum > n:
+        if need_real_sum > self.n:
             return 0
         
         ranks = rank_need_real_dict.keys()
@@ -72,11 +70,11 @@ class Solver:
     
         ways_positive = 0
         for rank_num_dict in rank_num_dict_list:
-            ways_positive += self.deck.ways_ranks_nums(n, rank_num_dict)
+            ways_positive += self.deck.ways_ranks_nums(self.n, rank_num_dict)
         
         assert ways_positive > 0
         
-        ways_total = self.deck.total_ways(n)
+        ways_total = self.deck.total_ways(self.n)
         
         return ways_positive / ways_total
     
@@ -88,19 +86,17 @@ class Solver:
         if need_real <= 0:
             return 1
         
-        n = self.unknown_cards_in_play_num
-        
-        if need_real > n:
+        if need_real > self.n:
             return 0
         
         
         ways_positive = 0
         for suit_num in range(need_real, EACH_SUIT_COUNT + 1):
-            ways_positive += self.deck.ways_suit(n, suit, suit_num)
+            ways_positive += self.deck.ways_suit(self.n, suit, suit_num)
         
         assert ways_positive > 0
         
-        ways_total = self.deck.total_ways(n)
+        ways_total = self.deck.total_ways(self.n)
         
         return ways_positive / ways_total
     
@@ -112,14 +108,12 @@ class Solver:
         if need_real <= 0:
             return 1
         
-        n = self.unknown_cards_in_play_num
-        
-        if need_real > n:
+        if need_real > self.n:
             return 0
         
-        ways_positive = self.deck.ways_small_poker(n, suit, need_real)
+        ways_positive = self.deck.ways_small_poker(self.n, suit, need_real)
         
-        ways_total = self.deck.total_ways(n)
+        ways_total = self.deck.total_ways(self.n)
         
         return ways_positive / ways_total 
        
@@ -133,14 +127,12 @@ class Solver:
         if need_real <= 0:
             return 1
         
-        n = self.unknown_cards_in_play_num
-        
-        if need_real > n:
+        if need_real > self.n:
             return 0
         
-        ways_positive = self.deck.ways_big_poker(n, suit, need_real)
+        ways_positive = self.deck.ways_big_poker(self.n, suit, need_real)
         
-        ways_total = self.deck.total_ways(n)
+        ways_total = self.deck.total_ways(self.n)
         
         return ways_positive / ways_total
     
@@ -208,5 +200,3 @@ combinations.extend([Combination(f"quad_{rank}", "probability_quad", {"rank": ra
 combinations.extend([Combination(f"flush_{suit}", "probability_flush", {"suit": suit}) for suit in SUITS])
 combinations.extend([Combination(f"small_poker_{suit}",  "probability_small_poker", {"suit": suit}) for suit in SUITS])
 combinations.extend([Combination(f"big_poker_{suit}", "probability_big_poker", {"suit": suit}) for suit in SUITS])
-
-print(len(combinations))

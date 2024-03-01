@@ -1,3 +1,5 @@
+import json_fix
+
 from typing import Literal
 from helpers import RANKS, SUITS
 
@@ -33,3 +35,6 @@ class Card:
 
     def __repr__(self):
         return f"{self.rank}{self.suit}"
+    
+    def __json__(self):
+        return self.__dict__
