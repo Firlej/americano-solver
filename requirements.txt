@@ -2,3 +2,4 @@ tqdm==4.65.0
 pandas==2.1.4
 numpy==1.26.3
 streamlit==1.30.0
+json-fix==1.0.0
